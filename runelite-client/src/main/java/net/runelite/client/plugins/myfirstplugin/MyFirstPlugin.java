@@ -2,18 +2,17 @@ package net.runelite.client.plugins.myfirstplugin;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import net.runelite.api.Client;
-import net.runelite.api.Item;
-import net.runelite.api.Skill;
-import net.runelite.api.World;
+import net.runelite.api.*;
 import net.runelite.api.events.ExperienceChanged;
 import net.runelite.api.events.ItemContainerChanged;
 import net.runelite.client.eventbus.Subscribe;
+import net.runelite.client.game.ItemManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
 
 import javax.inject.Inject;
+import java.util.stream.Stream;
 
 @Slf4j
 @PluginDescriptor(
@@ -24,6 +23,14 @@ import javax.inject.Inject;
 public class MyFirstPlugin extends Plugin {
     @Getter
     private Item[] equippedItems;
+
+    @Getter
+    private ItemManager itemManager;
+
+
+    @Getter
+    private Item[] inventoryItems;
+
     @Inject
     private Client client;
     @Inject
@@ -32,13 +39,9 @@ public class MyFirstPlugin extends Plugin {
     @Inject
     private MyOverlay myOverlay;
 
-    @Inject
-    private World world;
-
     @Override
     public void startUp() {
         overlayManager.add(myOverlay);
-        client.changeWorld(world);
     }
 
     @Override
@@ -48,11 +51,25 @@ public class MyFirstPlugin extends Plugin {
 
     @Subscribe
     public void onItemContainerChanged(final ItemContainerChanged event){
-        equippedItems = event.getItemContainer().getItems();
-        for (int i = 0; i < equippedItems.length; i++) {
-            if (equippedItems[i].getId() != -1) {
-                System.out.println("You are carrying: " + equippedItems[i].toString());
+        boolean foundNat = false;
+        if (event.getItemContainer() != client.getItemContainer(InventoryID.INVENTORY))
+        {
+            System.out.println("Something happened to another container than the inventory.");
+            return;
+        }
+
+        System.out.println("The inventory changed.");
+
+        final Item[] items = event.getItemContainer().getItems();
+
+        for(Item item : items){
+            if(item.getId() == ItemID.NATURE_RUNE){
+                System.out.println("You are holding the most beloved item in Runescape");
+                foundNat = true;
             }
+        }
+        if(!foundNat){
+            System.out.println("You are not holding a nature rune.");
         }
     }
 
