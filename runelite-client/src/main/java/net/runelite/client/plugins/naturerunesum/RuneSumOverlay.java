@@ -1,5 +1,4 @@
-package net.runelite.client.plugins.naturerunehighlighter;
-import com.google.common.graph.Graph;
+package net.runelite.client.plugins.naturerunesum;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
@@ -9,15 +8,15 @@ import net.runelite.client.ui.overlay.components.PanelComponent;
 import javax.inject.Inject;
 import java.awt.*;
 
-public class MyOverlay extends Overlay {
-    private NatureRuneHighlighter plugin;
+public class RuneSumOverlay extends Overlay {
+    private NatureRuneSum plugin;
 
     private PanelComponent panelComponent = new PanelComponent();
 
     @Inject
-    public MyOverlay(NatureRuneHighlighter plugin){
+    public RuneSumOverlay(NatureRuneSum plugin){
         super(plugin);
-        setPosition(OverlayPosition.DYNAMIC);
+        setPosition(OverlayPosition.TOP_LEFT);
         setLayer(OverlayLayer.ABOVE_SCENE);
         this.plugin = plugin;
     }
@@ -26,8 +25,8 @@ public class MyOverlay extends Overlay {
     public Dimension render(Graphics2D graphics){
         panelComponent.getChildren().clear();
         panelComponent.getChildren().add(LineComponent.builder()
-                .left("Firemaking:")
-                .right(Integer.toString(plugin.getFiremakingLevel()))
+                .left("Number Crafted:")
+                .right(Integer.toString(plugin.getNumberCrafted()))
                 .build());
         return panelComponent.render(graphics);
     }
