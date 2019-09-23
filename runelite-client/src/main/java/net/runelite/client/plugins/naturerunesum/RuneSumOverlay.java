@@ -8,13 +8,15 @@ import net.runelite.client.ui.overlay.components.PanelComponent;
 import javax.inject.Inject;
 import java.awt.*;
 
-public class RuneSumOverlay extends Overlay {
+public class RuneSumOverlay extends Overlay
+{
     private NatureRuneSum plugin;
 
     private PanelComponent panelComponent = new PanelComponent();
 
     @Inject
-    public RuneSumOverlay(NatureRuneSum plugin){
+    public RuneSumOverlay(NatureRuneSum plugin)
+    {
         super(plugin);
         setPosition(OverlayPosition.TOP_LEFT);
         setLayer(OverlayLayer.ABOVE_SCENE);
@@ -22,11 +24,12 @@ public class RuneSumOverlay extends Overlay {
     }
 
     @Override
-    public Dimension render(Graphics2D graphics){
+    public Dimension render(Graphics2D graphics)
+    {
         panelComponent.getChildren().clear();
         panelComponent.getChildren().add(LineComponent.builder()
-                .left("Number Crafted:")
-                .right(Integer.toString(plugin.getNumberCrafted()))
+                .left("Nature Sum:")
+                .right(Integer.toString(plugin.getSumOfNatureRunes()))
                 .build());
         return panelComponent.render(graphics);
     }
